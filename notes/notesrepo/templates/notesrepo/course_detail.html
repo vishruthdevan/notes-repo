@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Repo - Courses</title>
+    <title>{{course.code}}</title>
 </head>
 <body>
-{% if course_list %}
-    {% for course in course_list %}
-       <p><a href="{% url 'course_detail' course.code %}">{{course.name}}</a></p>     
-    {% endfor %}
-{% endif %}
+    <p>{{course.name}}</p>
+    <p>{{course.code}}</p>
+    {% if notes %}
+        {% for note in notes %}
+            <p>{{note.topic}}</p>    
+        {% endfor %}    
+    {% endif %}
 </body>
 </html>
