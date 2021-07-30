@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{course.code}}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}<title>{{course.code}}</title>{% endblock title %}
+
+{% block content %}
+<div class="container">
     <p>{{course.name}}</p>
     <p>{{course.code}}</p>
     {% if notes %}
@@ -14,5 +11,5 @@
             <p>{{note.topic}}</p>    
         {% endfor %}    
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock content %}
