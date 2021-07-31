@@ -4,13 +4,19 @@ from django.db import models
 class Note(models.Model):
     topic = models.CharField(max_length=50)
     note_file = models.FileField(upload_to='notes/%Y/%m/%d/')
-    course = models.ForeignKey('Course', on_delete=models.SET_NULL, null=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE)
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
 
 class Course(models.Model):
     code = models.SlugField(max_length=50)
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return str(self.code) + '-' + str(self.name)
+
 class Author(models.Model):
     name = models.CharField(max_length=50)
     exp = models.IntegerField()
+
+    def __str__(self):
+        return self.name
