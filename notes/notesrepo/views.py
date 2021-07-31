@@ -1,3 +1,4 @@
+from django.db.models.fields import files
 from django.http import response
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -45,3 +46,17 @@ class CourseCreate(View):
             return redirect(self.success_url)
         context = {'form':form}
         return render(request, self.template_name, context)
+
+
+class NoteCreate(generic.CreateView):
+    model = Note
+    fields = '__all__'
+    template_name = 'notesrepo/note_create.html'
+    success_url = reverse_lazy('course_list')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)

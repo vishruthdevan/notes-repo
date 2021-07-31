@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Upload a note</title>{% endblock title %}
+
+{% block content %}
+    <div class="container m-10">
+        {% load crispy_forms_tags %}
+        <form action="" method="post">
+        {% csrf_token %}
+        {{ form | crispy}}
+        <input type="submit" value="Submit">
+        <input type="submit" 
+           onclick="window.location='{% url 'course_detail' view.kwargs.code%}'; return false;" value="Cancel">
+        </form>
+    </div>
+{% endblock content %}
