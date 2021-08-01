@@ -4,7 +4,7 @@ from django.db import models
 class Note(models.Model):
     topic = models.CharField(max_length=50)
     note_file = models.FileField(upload_to='notes/%Y/%m/%d/')
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
+    course = models.ForeignKey('Course', on_delete=models.SET_NULL, null=True)
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
 
 class Course(models.Model):

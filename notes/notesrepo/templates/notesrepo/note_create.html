@@ -5,12 +5,12 @@
 {% block content %}
     <div class="container m-10">
         {% load crispy_forms_tags %}
-        <form action="" method="post">
+        <form action="" enctype="multipart/form-data" method="post">
         {% csrf_token %}
         {{ form | crispy}}
         <input type="submit" value="Submit">
-        <input type="submit" 
-           onclick="window.location='{% url 'course_detail' view.kwargs.code%}'; return false;" value="Cancel">
+        {% comment %} <input type="submit" 
+           onclick="window.location='{% url 'course_detail' view.kwargs.code %}'; return false;" value="Cancel"> {% endcomment %}
         </form>
     </div>
 {% endblock content %}
