@@ -12,7 +12,7 @@
     {% if notes %}
         <ul>
             {% for note in notes %}
-                <li>{{note.topic}}</li>  
+                <li>{{note.topic}} <span>  ------ <a href="{{note.note_file.url}}" target="_blank">View</a> | <a href="{{note.note_file.url}}" download>Download</a></span></li>
             {% endfor %}
         </ul>
     {% endif %}
