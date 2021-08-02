@@ -7,12 +7,15 @@ class Note(models.Model):
     course = models.ForeignKey('Course', on_delete=models.SET_NULL, null=True)
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.topic)
+
 class Course(models.Model):
     code = models.SlugField(max_length=50)
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return str(self.code) + '-' + str(self.name)
+        return str(self.code) + ' - ' + str(self.name)
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
