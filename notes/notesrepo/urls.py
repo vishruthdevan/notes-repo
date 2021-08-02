@@ -5,7 +5,7 @@ from . import views
 
 #app_name = 'notesrepo'
 urlpatterns = [
-    path('', views.index),
+    path('', views.index, name= 'index'),
     path('courses/', views.CourseListView.as_view(), name = 'course_list'),
     path('courses/create/', views.CourseCreate.as_view(), name = 'course_create'),
     path('courses/<slug:code>/', views.CourseDetailView.as_view(), name = 'course_detail'),
