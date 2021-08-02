@@ -3,14 +3,20 @@
 {% block title %}<title>{{course.code}}</title>{% endblock title %}
 
 {% block content %}
-<div class="container">
-    <p>{{course.name}}</p>
-    <p>{{course.code}}</p>
+<div class="container m-5">
+    <p><a href="{% url 'course_list' %}">Go back</a></p>
+    <p>Name : {{course.name}}</p>
+    <p>Code : {{course.code}}</p>
+    <div class="my-5">
+    <p>Notes Available:</p>
     {% if notes %}
-        {% for note in notes %}
-            <p>{{note.topic}}</p>    
-        {% endfor %}    
+        <ul>
+            {% for note in notes %}
+                <li>{{note.topic}}</li>  
+            {% endfor %}
+        </ul>
     {% endif %}
     <p><a href="{% url 'note_create' course.code %}">Upload a note file</a></p>
+    </div>
 </div>
 {% endblock content %}

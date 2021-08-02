@@ -1,12 +1,17 @@
+{% extends 'base.html' %}
+
 {% block title %}<title>Notes Repo - Courses</title>{% endblock title %}
 
 {% block content %}
-<a href="{% url 'course_create' %}">Create a course</a>
-{% if course_list %}
-    <ul>
-    {% for course in course_list %}
-       <li><a href="{% url 'course_detail' course.code %}">{{course.name}}</a></li>     
-    {% endfor %}
-    </ul>
-{% endif %}
+<div class="container m-5">
+    <p><a href="{% url 'index' %} ">Go back</a></p>
+    {% if course_list %}
+        <ul>
+        {% for course in course_list %}
+           <li><a href="{% url 'course_detail' course.code %}">{{course.name}}</a></li>     
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <p><a href="{% url 'course_create' %}">Create a course</a></p>
+</div>
 {% endblock content %}
