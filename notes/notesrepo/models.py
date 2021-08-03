@@ -19,7 +19,7 @@ class Course(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     exp = models.IntegerField()
 
     def __str__(self):

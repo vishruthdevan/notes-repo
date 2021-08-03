@@ -7,12 +7,33 @@ from .models import *
 from django.urls import reverse, reverse_lazy
 from . import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login
+
 
 def index(request):
     return render(request, 'notesrepo/index.html')
 
+class Signup(View):
+    def get(self, request):
+        form = forms.RegisterForm()
+        return render(request, "registration/signup.html", {'form' : form})
 
-# Create your views here.
+    def post(self, request):
+        context = request.POST.copy()
+        context['exp'] = '0'
+        form = forms.RegisterForm(request.POST)
+        aform = forms.AuthorForm(context)
+        print(form.is_valid(), aform.is_valid())
+        if form.is_valid() and aform.is_valid():
+            user = form.save()
+            user.refresh_from_db()
+            aform = forms.AuthorForm(context, instance = user.author)
+            aform.is_valid()
+            aform.save()
+            login(request, user)
+            return redirect(reverse('index'))
+
+
 class CourseListView(generic.ListView):
     model = Course
 
