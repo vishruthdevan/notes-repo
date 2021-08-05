@@ -20,7 +20,7 @@ class Course(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     exp = models.IntegerField()
 
     def __str__(self):
