@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %} <title>Delete?</title>  {% endblock title %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete {{object}}</p>
+        <input type="submit" value="Confirm">
+        <input type="submit" value="Cancel" onclick="window.location='{% url 'course_detail' view.kwargs.code %}'; return false;">
+    </form>
+{% endblock content %}
