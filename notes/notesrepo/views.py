@@ -102,3 +102,15 @@ class NoteDelete(LoginRequiredMixin, generic.DeleteView):
         print(qs)
         return qs.filter(author__user=self.request.user)
         
+class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Note
+    fields = ['topic', 'note_file']
+    template_name = 'notesrepo/note_create.html'
+
+    def get_success_url(self):
+        success_url = reverse_lazy('course_detail', kwargs =  {'code' : self.kwargs['code']})
+        return success_url
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(author__user = self.request.user)
