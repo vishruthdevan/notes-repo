@@ -29,10 +29,10 @@ class Course(models.Model):
         return str(self.code) + ' - ' + str(self.name)
 
 class Comment(models.Model):
-    comment = models.TextField(max_length=200)
+    text = models.TextField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
 
     def __str__(self):
-        if len(self.comment) < 15 : return self.text
-        return self.comment[:11] + ' ...'
+        if len(self.text) < 15 : return self.text
+        return self.text[:11] + ' ...'

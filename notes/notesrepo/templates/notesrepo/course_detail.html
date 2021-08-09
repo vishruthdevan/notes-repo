@@ -19,6 +19,15 @@
                     <a href="{% url 'note_update' view.kwargs.code note.id %}">Update</a>
                     </p>
                 {% endif %}
+                <ul>
+                {% if comments%}
+                    {% for comment in comments %}
+                        {% if comment.note == note %}
+                            <li>{{comment.text}}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                </ul>
                 </li>
             {% endfor %}
         </ul>
