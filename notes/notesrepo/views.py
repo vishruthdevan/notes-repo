@@ -1,6 +1,6 @@
 from django.db.models.fields import files
 from django.http import response
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from django.views import View
 from .models import *
@@ -129,3 +129,17 @@ class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(author__user = self.request.user)
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.db.utils import IntegrityError
+
+@method_decorator(csrf_exempt, name='dispatch')
+class NoteLike(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        note = get_object_or_404(Note, id = kwargs['pk'])
+        author = get_object_or_404(Author, user = request.user)
+        note.like.add(author)
+        print('HAPPENED \n\n\n\n\nHAPPENED')
+        note.save()
+        return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
