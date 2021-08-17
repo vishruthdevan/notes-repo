@@ -17,7 +17,7 @@ class Note(models.Model):
     course = models.ForeignKey('Course', on_delete=models.SET_NULL, null=True)
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
     comments = models.ManyToManyField(Author, through='Comment', related_name='author_comments')
-
+    like = models.ManyToManyField(Author, related_name = 'liked')
     def __str__(self):
         return str(self.topic)
 
