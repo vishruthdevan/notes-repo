@@ -21,6 +21,7 @@
                 {% endif %}
                 <p>
                 <a href="#" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;">Like</a>
+                <a href="#" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;">Dislike</a>
                 </p>
                 <ul>
                 {% if comments%}
@@ -40,7 +41,6 @@
 </div>
 <script type="text/javascript">
 function like(url, id) {
-    console.log("shit got called");
     $.post(url, {},  function(rowz){
         console.log(url, 'finished');
     }).fail(function(xhr) {

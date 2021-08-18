@@ -13,7 +13,8 @@ urlpatterns = [
     path('courses/<slug:code>/upload-note/', views.NoteCreate.as_view(), name = 'note_create'),
     path('courses/<slug:code>/<int:pk>/delete-note/', views.NoteDelete.as_view(), name = 'note_delete'),
     path('courses/<slug:code>/<int:pk>/update-note/', views.NoteUpdate.as_view(), name = 'note_update'),
-    path('courses/<slug:code>/<int:pk>/like/', views.NoteLike.as_view(), name = 'note_like'),
+    path('courses/<slug:code>/like/<int:pk>/', views.NoteLike.as_view(), name = 'note_like'),
+    path('courses/<slug:code>/dislike/<int:pk>/', views.NoteDislike.as_view(), name = 'note_dislike')
     # path('courses/<slug:code>',),
     # path('courses/<slug:code>/notes',),
 ]
