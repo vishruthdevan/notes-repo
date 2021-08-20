@@ -31,6 +31,11 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
+                {% if user.is_authenticated %}
+                    <form action="{% url 'comment_create' %}" method="post">
+                        {{ course_form | crispy}}
+                    </form>
+                {% endif %}
                 </ul>
                 </li>
             {% endfor %}
