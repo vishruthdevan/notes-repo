@@ -1,5 +1,5 @@
 from django.db.models.fields import files
-from django.http import response
+from django.http import request, response
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import generic
 from django.views import View
@@ -51,6 +51,8 @@ class CourseDetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["notes"] = Note.objects.filter(course__code = context['course'].code)
         context["comments"] = Comment.objects.all()
+        comment_form = forms.CommentForm()
+        context["comment_form"] = comment_form
         return context
     
 class CourseCreate(LoginRequiredMixin, View):
@@ -77,12 +79,11 @@ class NoteCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['topic','note_file']
     template_name = 'notesrepo/note_create.html'
 
-    def get_success_url(self) -> str:
+    def get_success_url(self):
         success_url = reverse_lazy('course_detail', kwargs = self.kwargs)
         return success_url
     
     def form_valid(self, form):
-        print(self.request.user)
         data = form.save(commit=False)
         data.course = Course.objects.get(code = self.kwargs['code'])
         author = Author.objects.get(user = self.request.user)
@@ -130,8 +131,13 @@ class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
         qs = super().get_queryset()
         return qs.filter(author__user = self.request.user)
 
-class CreateComment(LoginRequiredMixin, View):
-    def post(*args, **kwargs):
+class CommentCreate(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        print(self.request.POST)
+        c = Comment(text = request.POST['text'], note=Note.objects.get(id=kwargs['pk']), author=Author.objects.get(user=self.request.user))
+        c.save()
+        return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
+        
         
 
 from django.views.decorators.csrf import csrf_exempt
