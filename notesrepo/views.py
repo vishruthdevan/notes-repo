@@ -53,6 +53,9 @@ class CourseDetailView(generic.DetailView):
         context["comments"] = Comment.objects.all()
         comment_form = forms.CommentForm()
         context["comment_form"] = comment_form
+        author = Author.objects.get(user=self.request.user)
+        liked = author.liked.all()
+        context["liked"] = liked
         return context
     
 class CourseCreate(LoginRequiredMixin, View):
