@@ -140,8 +140,8 @@ class CommentCreate(LoginRequiredMixin, View):
         c = Comment(text = request.POST['text'], note=Note.objects.get(id=kwargs['pk']), author=Author.objects.get(user=self.request.user))
         c.save()
         return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
-        
-        
+
+
 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
