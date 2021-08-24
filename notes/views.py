@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 
 def index(request):
-    return render(request, 'notesrepo/index.html')
+    return render(request, 'notes/index.html')
 
 class Signup(View):
     def get(self, request):
@@ -61,7 +61,7 @@ class CourseDetailView(generic.DetailView):
 class CourseCreate(LoginRequiredMixin, View):
     model = Course
     success_url = reverse_lazy('course_list')
-    template_name = 'notesrepo/course_create.html'
+    template_name = 'notes/course_create.html'
     
     def get(self, request):
         form = forms.CourseForm()
@@ -80,7 +80,7 @@ class CourseCreate(LoginRequiredMixin, View):
 class NoteCreate(LoginRequiredMixin, generic.CreateView):
     model = Note
     fields = ['topic','note_file']
-    template_name = 'notesrepo/note_create.html'
+    template_name = 'notes/note_create.html'
 
     def get_success_url(self):
         success_url = reverse_lazy('course_detail', kwargs = self.kwargs)
@@ -124,7 +124,7 @@ class NoteDelete(LoginRequiredMixin, generic.DeleteView):
 class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Note
     fields = ['topic', 'note_file']
-    template_name = 'notesrepo/note_create.html'
+    template_name = 'notes/note_create.html'
 
     def get_success_url(self):
         success_url = reverse_lazy('course_detail', kwargs =  {'code' : self.kwargs['code']})
