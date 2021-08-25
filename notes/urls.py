@@ -15,6 +15,7 @@ urlpatterns = [
     path('courses/<slug:code>/<int:pk>/update-note/', views.NoteUpdate.as_view(), name = 'note_update'),
     path('courses/<slug:code>/<int:pk>/like/', views.NoteLike.as_view(), name = 'note_like'),
     path('courses/<slug:code>/<int:pk>/dislike/', views.NoteDislike.as_view(), name = 'note_dislike'),
-    path('courses/<slug:code>/<int:pk>/comment',views.CommentCreate.as_view(), name = 'comment_create'),
+    path('courses/<slug:code>/<int:pk>/create-comment',views.CommentCreate.as_view(), name = 'comment_create'),
+    path('courses/<slug:code>/<int:pk>/delete-comment/<int:cid>',views.CommentDelete.as_view(), name = 'comment_delete'),
     # path('courses/<slug:code>/notes',),
 ]

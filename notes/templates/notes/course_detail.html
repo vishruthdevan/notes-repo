@@ -34,7 +34,15 @@
                 {% if comments%}
                     {% for comment in comments %}
                         {% if comment.note == note %}
-                            <li>{{comment.text}} ---- {{comment.updated_at | date:"r" }}</li>
+                            <li>
+                                <form action="{% url 'comment_delete' view.kwargs.code note.id comment.id %}" method="post">
+                                    {{comment.text}} ---------- {{comment.updated_at | date:"r" }}
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn bg-transparent my-1">
+                                        <i class="bi bi-trash2-fill"></i>
+                                    </button>
+                                </form>     
+                            </li>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
