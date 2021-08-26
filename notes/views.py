@@ -26,7 +26,6 @@ class Signup(View):
         aform = forms.AuthorForm(context)
         if form.is_valid() and aform.is_valid():
             form.save()
-            print(User.objects.get(username = request.POST['username']))
             user = User.objects.get(username = request.POST['username'])
             instance = aform.save(commit=False)
             instance.user = user
@@ -105,7 +104,6 @@ class NoteDelete(LoginRequiredMixin, generic.DeleteView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        print(qs)
         return qs.filter(author__user=self.request.user)
 
     def delete(self, request, *args, **kwargs):
@@ -156,7 +154,6 @@ class NoteLike(LoginRequiredMixin, View):
         note = get_object_or_404(Note, id = kwargs['pk'])
         author = get_object_or_404(Author, user = request.user)
         note.like.add(author)
-        print('LIKED\n\n\n\n\nLIKED')
         note.save()
         return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
 
@@ -167,6 +164,5 @@ class NoteDislike(LoginRequiredMixin, View):
         note = get_object_or_404(Note, id = kwargs['pk'])
         author = get_object_or_404(Author, user = request.user)
         note.like.remove(author)
-        print('DISLIKED\n\n\n\n\nDISLIKED')
         note.save()
         return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
