@@ -115,7 +115,10 @@ class NoteDelete(LoginRequiredMixin, generic.DeleteView):
         success_url = self.get_success_url()
         self.object.delete()
         author = Author.objects.get(user = self.request.user)
-        author.exp -= 10
+        if author.exp - 10 < 0:
+            author.exp = 0
+        else:
+            author.exp -= 10
         author.save()
         return HttpResponseRedirect(success_url)
         
@@ -134,13 +137,22 @@ class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
 
 class CommentCreate(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        c = Comment(text = request.POST['text'], note=Note.objects.get(id=kwargs['pk']), author=Author.objects.get(user=self.request.user))
+        author=Author.objects.get(user=self.request.user)
+        author.exp += 5
+        author.save()
+        c = Comment(text = request.POST['text'], note=Note.objects.get(id=kwargs['pk']), author=author)
         c.save()
         return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
 
 class CommentDelete(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         c = get_object_or_404(Comment, id=kwargs['cid'])
+        author = c.author
+        if author.exp - 5 < 0:
+            author.exp = 0
+        else:
+            author.exp -= 5
+        author.save()
         c.delete()
         return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
 
