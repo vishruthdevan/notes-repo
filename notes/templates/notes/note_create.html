@@ -3,6 +3,10 @@
 {% block title %}<title>Upload a note</title>{% endblock title %}
 
 {% block content %}
+    {% if form.errors %}
+    {{ form.errors }}
+    {% endif %}
+
     <div class="container m-10">
         {% load crispy_forms_tags %}
         <form action="" enctype="multipart/form-data" method="post">
