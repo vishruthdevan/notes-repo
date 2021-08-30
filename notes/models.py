@@ -38,7 +38,7 @@ class Course(models.Model):
         return str(self.code) + ' - ' + str(self.name)
 
 class Comment(models.Model):
-    text = models.TextField(max_length=200)
+    text = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
 
