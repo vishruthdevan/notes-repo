@@ -17,6 +17,8 @@
 
 <body>
     {% block leaders %}
+    <div class="container m-5">
+    <hX>Leaderboard</hX>
     <ol>
         {% for leader in leaders %} 
             <li>{{leader.name}} | {{leader.exp}}</li>
@@ -26,6 +28,7 @@
     {% if user.is_authenticated and user.is_active %}
         <p>Current User: {{user.username}}</p>
     {% endif %}
+    </div>
     {% block content %}{% endblock content %}
 </body>
 </html>
