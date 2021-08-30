@@ -10,6 +10,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
+
 
 def index(request):
     return render(request, 'notes/index.html')
@@ -53,10 +55,11 @@ class CourseDetailView(LoginRequiredMixin, generic.DetailView):
         if search:
             q = Note.objects.filter(course__code = context['course'].code)
             q = q.filter(topic__contains=search)
-            context["notes"] = q
         else:
-            context["notes"] = Note.objects.filter(course__code = context['course'].code)
-        
+            q = Note.objects.filter(course__code = context['course'].code)
+
+        page = Paginator(q.order_by('id'), 1)
+        context["notes"] = page.get_page(self.request.GET.get("page", 1))
         context["comments"] = Comment.objects.all()
         comment_form = forms.CommentForm()
         context["comment_form"] = comment_form

@@ -1,94 +1,132 @@
 {% extends 'base.html' %}
 
 <head>
-{% block head %}
-{{ block.super }}
-{% block title %}<title>{{course.code}}</title>{% endblock title %}
-<style>
-.asteriskField {
-    display: none;
-}
-</style>
-{% endblock head %}
+  {% block head %}
+  {{ block.super }}
+  {% block title %}<title>{{course.code}}</title>{% endblock title %}
+  <style>
+    .asteriskField {
+      display: none;
+    }
+
+    textarea {
+      max-height: 3em
+    }
+
+    ;
+  </style>
+  {% endblock head %}
 </head>
 
 {% block content %}
 <div class="container m-5">
-    <p><a href="{% url 'course_list' %}">Go back</a></p>
-    <p>Name : {{course.name}}</p>
-    <p>Code : {{course.code}}</p>
-    <div class="my-5">
+  <p><a href="{% url 'course_list' %}">Go back</a></p>
+  <p>Name : {{course.name}}</p>
+  <p>Code : {{course.code}}</p>
+  <div class="my-5">
     <p>
     <form action="" method="get">
-        <input type="text" name="search" placeholder="Search...">
-        <input type="submit" value="Submit">
+      <input type="text" name="search" placeholder="Search...">
+      <input type="submit" value="Submit">
     </form>
     </p>
     <p>Notes Available:</p>
     {% if notes %}
+    <ul>
+      {% for note in notes %}
+      <li>{{note.topic}} <span> ------ <a href="{{note.note_file.url}}" target="_blank">View</a> | <a
+            href="{{note.note_file.url}}" download>Download</a></span>
+        {% if user == note.author.user %}
+        <p>
+          <a href="{% url 'note_delete' view.kwargs.code note.id %}">Delete</a> |
+          <a href="{% url 'note_update' view.kwargs.code note.id %}">Update</a>
+        </p>
+        {% endif %}
+        {% if note in liked %}
+        <p>
+          <a href="#" style="display: none;"
+            onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;"
+            id="like_{{ note.id }}">Like</a>
+          <a href="#" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;"
+            id="dislike_{{ note.id }}">Dislike</a>
+        </p>
+        {% else %}
+        <p>
+          <a href="#" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;"
+            id="like_{{ note.id }}">Like</a>
+          <a href="#" style="display: none;"
+            onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;"
+            id="dislike_{{ note.id }}">Dislike</a>
+        </p>
+        {% endif %}
         <ul>
-            {% for note in notes %}
-                <li>{{note.topic}} <span>  ------ <a href="{{note.note_file.url}}" target="_blank">View</a> | <a href="{{note.note_file.url}}" download>Download</a></span>
-                {% if user == note.author.user %}
-                    <p>
-                    <a href="{% url 'note_delete' view.kwargs.code note.id %}">Delete</a> | 
-                    <a href="{% url 'note_update' view.kwargs.code note.id %}">Update</a>
-                    </p>
-                {% endif %}
-                {% if note in liked %}
-                    <p>
-                        <a href="#" style="display: none;" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="like_{{ note.id }}">Like</a>
-                        <a href="#" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="dislike_{{ note.id }}">Dislike</a>
-                    </p>
-                {% else %}
-                    <p>
-                        <a href="#" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="like_{{ note.id }}">Like</a>
-                        <a href="#" style="display: none;" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="dislike_{{ note.id }}">Dislike</a>
-                    </p>
-                {% endif %}
-                <ul>
-                {% if comments%}
-                    {% for comment in comments %}
-                        {% if comment.note == note %}
-                            <li>
-                                <form action="{% url 'comment_delete' view.kwargs.code note.id comment.id %}" method="post">
-                                    {{comment.text}} ---------- {{comment.updated_at | date:"r" }}
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn bg-transparent my-1">
-                                        <i class="bi bi-trash2-fill"></i>
-                                    </button>
-                                </form>     
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-                <li>
-                {% if user.is_authenticated %}
-                    <form action="{% url 'comment_create' view.kwargs.code note.id%}" method="post">
-                        {% csrf_token %}
-                        {% load crispy_forms_tags %}
-                        {{ comment_form | crispy}}
-                        <input type="submit" value="Submit">
-                    </form>
-                {% endif %}
-                </li>
-                </ul>
-            </li>    
-            {% endfor %}
+          {% if comments%}
+          {% for comment in comments %}
+          {% if comment.note == note %}
+          <li>
+            <form action="{% url 'comment_delete' view.kwargs.code note.id comment.id %}" method="post">
+              {{comment.text}} ---------- {{comment.updated_at | date:"r" }}
+              {% csrf_token %}
+              <button type="submit" class="btn bg-transparent my-1">
+                <i class="bi bi-trash2-fill"></i>
+              </button>
+            </form>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+          <li>
+            {% if user.is_authenticated %}
+            <form action="{% url 'comment_create' view.kwargs.code note.id%}" method="post">
+              {% csrf_token %}
+              {% load crispy_forms_tags %}
+              {{ comment_form | crispy}}
+              <input type="submit" value="Submit">
+            </form>
+            {% endif %}
+          </li>
         </ul>
+      </li>
+      {% endfor %}
+    </ul>
     {% endif %}
     <p><a href="{% url 'note_create' course.code %}">Upload a note file</a></p>
-    </div>
+  </div>
 </div>
+
+<div class="container m-5 pagination">
+    <span class="step-links">
+        <span style="display: inline-block; padding-right: 10px;">
+        {% if notes.has_previous %}
+            <a href="?page=1" style="padding-right :10px;"> &laquo;first </a>
+            <a href="?page={{ notes.previous_page_number }}"> previous </a>
+        {% endif %}
+        </span>
+
+
+        <span class="current" style="display: inline-block; padding-right: 10px;">
+            Page {{ notes.number }} of {{ notes.paginator.num_pages }}                                            
+        </span>
+
+        <span style="display: inline-block; padding-right :10px;">
+        {% if notes.has_next %}
+            <a href="?page={{ notes.next_page_number }}" style="padding-right :10px;">next</a>
+            <a href="?page={{ notes.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+        </span>
+    </span>
+</div>
+
+
 <script type="text/javascript">
-function like(url, id) {
-    $.post(url, {},  function(rowz){
-        console.log(url, 'finished');
-    }).fail(function(xhr) {
-        alert('Url failed with '+xhr.status+' '+url);
+  function like(url, id) {
+    $.post(url, {}, function (rowz) {
+      console.log(url, 'finished');
+    }).fail(function (xhr) {
+      alert('Url failed with ' + xhr.status + ' ' + url);
     });
     $(`#like_${id}`).toggle();
     $(`#dislike_${id}`).toggle();
-}
+  }
 </script>
 {% endblock content %}
