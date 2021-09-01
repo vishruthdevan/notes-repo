@@ -12,7 +12,8 @@
 
 <form method="post">
     {% csrf_token %}
-    {{form}}
+    {% load crispy_forms_tags %} 
+    {{form | crispy}}
     <input type="submit" value="Register">
 </form>
 
