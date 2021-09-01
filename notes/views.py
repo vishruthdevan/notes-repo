@@ -58,7 +58,7 @@ class CourseDetailView(LoginRequiredMixin, generic.DetailView):
         else:
             q = Note.objects.filter(course__code = context['course'].code)
 
-        page = Paginator(q.order_by('id'), 1)
+        page = Paginator(q.order_by('id'), 10)
         context["notes"] = page.get_page(self.request.GET.get("page", 1))
         context["comments"] = Comment.objects.all()
         comment_form = forms.CommentForm()
