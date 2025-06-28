@@ -8,7 +8,7 @@ class Note(models.Model):
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
 
 class Course(models.Model):
-    code = models.CharField(max_length=50)
+    code = models.SlugField(max_length=50)
     name = models.CharField(max_length=50)
 
 class Author(models.Model):
