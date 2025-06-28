@@ -136,12 +136,15 @@ class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
 
 class CommentCreate(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        print(self.request.POST)
         c = Comment(text = request.POST['text'], note=Note.objects.get(id=kwargs['pk']), author=Author.objects.get(user=self.request.user))
         c.save()
         return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
 
-
+class CommentDelete(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        c = get_object_or_404(Comment, id=kwargs['pk'])
+        c.delete()
+        return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
