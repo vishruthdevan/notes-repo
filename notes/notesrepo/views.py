@@ -50,6 +50,7 @@ class CourseDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["notes"] = Note.objects.filter(course__code = context['course'].code)
+        context["comments"] = Comment.objects.all()
         return context
     
 class CourseCreate(LoginRequiredMixin, View):
