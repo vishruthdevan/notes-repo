@@ -6,7 +6,7 @@ from django.views import View
 from .models import *
 from django.urls import reverse, reverse_lazy
 from . import forms
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
     return render(request, 'notesrepo/index.html')
@@ -28,7 +28,7 @@ class CourseDetailView(generic.DetailView):
         context["notes"] = Note.objects.filter(course__code = context['course'].code)
         return context
     
-class CourseCreate(View):
+class CourseCreate(LoginRequiredMixin, View):
     model = Course
     success_url = reverse_lazy('course_list')
     template_name = 'notesrepo/course_create.html'
@@ -47,9 +47,9 @@ class CourseCreate(View):
         return render(request, self.template_name, context)
 
 
-class NoteCreate(generic.CreateView):
+class NoteCreate(LoginRequiredMixin, generic.CreateView):
     model = Note
-    fields = ['topic','note_file','author']
+    fields = ['topic','note_file', 'author']
     template_name = 'notesrepo/note_create.html'
 
     def get_success_url(self) -> str:
@@ -57,7 +57,10 @@ class NoteCreate(generic.CreateView):
         return success_url
     
     def form_valid(self, form):
+        print(self.request.user)
         data = form.save(commit=False)
         data.course = Course.objects.get(code = self.kwargs['code'])
+        #data.author = Author.objects.get(owner = self.request.user)
         data.save()
+        
         return super().form_valid(form)
