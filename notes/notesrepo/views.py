@@ -1,8 +1,11 @@
 from django.http import response
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.views import View
 from .models import *
+from django.urls import reverse, reverse_lazy
+from . import forms
+
 
 def index(request):
     return render(request, 'notesrepo/index.html')
@@ -25,3 +28,20 @@ class CourseDetailView(generic.DetailView):
         context["notes"] = Note.objects.filter(course__code = context['course'].code)
         return context
     
+class CourseCreate(View):
+    model = Course
+    success_url = reverse_lazy('course_list')
+    template_name = 'notesrepo/course_create.html'
+    
+    def get(self, request):
+        form = forms.CourseForm()
+        context = {'form' : form}
+        return render(request, self.template_name, context)
+    
+    def post(self, request):
+        form = forms.CourseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(self.success_url)
+        context = {'form':form}
+        return render(request, self.template_name, context)

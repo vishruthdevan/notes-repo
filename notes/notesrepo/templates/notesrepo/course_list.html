@@ -7,10 +7,13 @@
     <title>Notes Repo - Courses</title>
 </head>
 <body>
+<a href="{% url 'course_create' %}">Create a course</a>
 {% if course_list %}
+    <ul>
     {% for course in course_list %}
-       <p><a href="{% url 'course_detail' course.code %}">{{course.name}}</a></p>     
+       <li><a href="{% url 'course_detail' course.code %}">{{course.name}}</a></li>     
     {% endfor %}
+    </ul>
 {% endif %}
 </body>
 </html>

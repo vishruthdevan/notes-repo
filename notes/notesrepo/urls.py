@@ -7,7 +7,8 @@ from . import views
 urlpatterns = [
     path('', views.index),
     path('courses/', views.CourseListView.as_view(), name = 'course_list'),
-    path('courses/<slug:code>', views.CourseDetailView.as_view(), name = 'course_detail')
+    path('courses/create/', views.CourseCreate.as_view(), name = 'course_create'),
+    path('courses/<slug:code>/', views.CourseDetailView.as_view(), name = 'course_detail'),
     # path('courses/<slug:code>',),
     # path('courses/<slug:code>/notes',),
 ]
