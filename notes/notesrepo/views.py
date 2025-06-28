@@ -30,7 +30,7 @@ class Signup(View):
             instance = aform.save(commit=False)
             instance.user = user
             instance.save()
-            login(self.request, User)
+            login(self.request, user)
             return redirect(reverse('index'))
         else:
             return render(self.request, 'registration/signup.html', {'form' : form})
@@ -89,3 +89,16 @@ class NoteCreate(LoginRequiredMixin, generic.CreateView):
         data.author = author
         data.save()
         return super().form_valid(form)
+
+class NoteDelete(LoginRequiredMixin, generic.DeleteView):
+    model = Note
+    
+    def get_success_url(self) -> str:
+        success_url = reverse_lazy('course_detail', kwargs = {'code' : self.kwargs['code']})
+        return success_url
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        print(qs)
+        return qs.filter(author__user=self.request.user)
+        
