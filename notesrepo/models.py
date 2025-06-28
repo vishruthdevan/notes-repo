@@ -8,6 +8,8 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     exp = models.IntegerField()
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 
@@ -18,6 +20,10 @@ class Note(models.Model):
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
     comments = models.ManyToManyField(Author, through='Comment', related_name='author_comments')
     like = models.ManyToManyField(Author, related_name = 'liked')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return str(self.topic)
 
@@ -25,6 +31,9 @@ class Course(models.Model):
     code = models.SlugField(max_length=50)
     name = models.CharField(max_length=50)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
         return str(self.code) + ' - ' + str(self.name)
 
@@ -32,6 +41,9 @@ class Comment(models.Model):
     text = models.TextField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         if len(self.text) < 15 : return self.text
