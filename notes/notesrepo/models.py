@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 # Create your models here.
 class Note(models.Model):
     topic = models.CharField(max_length=50)
@@ -19,6 +19,7 @@ class Course(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     exp = models.IntegerField()
 
     def __str__(self):
