@@ -9,6 +9,9 @@
     {% block head %}{% endblock head %}
 </head>
 <body>
+    {% if user.is_authenticated and user.is_active %}
+        <p>{{user.username}}</p>
+    {% endif %}
     {% block content %}{% endblock content %}
 </body>
 </html>

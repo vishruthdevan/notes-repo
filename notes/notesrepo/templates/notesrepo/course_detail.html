@@ -14,7 +14,10 @@
             {% for note in notes %}
                 <li>{{note.topic}} <span>  ------ <a href="{{note.note_file.url}}" target="_blank">View</a> | <a href="{{note.note_file.url}}" download>Download</a></span>
                 {% if user == note.author.user %}
-                    <a href="{% url 'note_delete' view.kwargs.code note.id %}">Delete</a>
+                    <p>
+                    <a href="{% url 'note_delete' view.kwargs.code note.id %}">Delete</a> | 
+                    <a href="{% url 'note_update' view.kwargs.code note.id %}">Update</a>
+                    </p>
                 {% endif %}
                 </li>
             {% endfor %}
