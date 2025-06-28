@@ -25,7 +25,6 @@ class CourseDetailView(generic.DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         context["notes"] = Note.objects.filter(course__code = context['course'].code)
         return context
     
@@ -47,16 +46,32 @@ class CourseCreate(View):
         context = {'form':form}
         return render(request, self.template_name, context)
 
+# class NoteCreate(View):
+#     template_name = 'notesrepo/note_create.html'
+#     success_url = reverse_lazy('course_list')
+
+#     def get(self, request, *args, **kwargs):
+#         form = forms.NoteForm()
+#         ctx = {'form': form}
+#         return render(request, self.template_name, ctx)
+
+#     def post(self, request, *args, **kwargs):
+#         form = forms.NoteForm(request.POST, request.FILES or None)
+
+#         if not form.is_valid():
+#             ctx = {'form': form}
+#             return render(request, self.template_name, ctx)
+
+#         # Add owner to the model before saving
+#         form.save(commit=True)
+#         return redirect(self.success_url)
+
 
 class NoteCreate(generic.CreateView):
     model = Note
     fields = '__all__'
     template_name = 'notesrepo/note_create.html'
-    success_url = reverse_lazy('course_list')
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    def get_success_url(self) -> str:
+        success_url = reverse_lazy('course_detail', kwargs = self.kwargs)
+        return success_url
