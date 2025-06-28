@@ -20,4 +20,4 @@ class RegisterForm(UserCreationForm):
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['name']
+        fields = ['name', 'exp']

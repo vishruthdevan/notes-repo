@@ -20,18 +20,22 @@ class Signup(View):
 
     def post(self, request):
         context = request.POST.copy()
-        context['exp'] = '0'
+        context['exp'] = 0
+        print(request.POST)
         form = forms.RegisterForm(request.POST)
         aform = forms.AuthorForm(context)
         print(form.is_valid(), aform.is_valid())
         if form.is_valid() and aform.is_valid():
             user = form.save()
             user.refresh_from_db()
-            aform = forms.AuthorForm(context, instance = user.author)
+            author = Author.objects.get_or_create(owner=user)
+            aform = forms.AuthorForm(context, instance = author)
             aform.is_valid()
             aform.save()
             login(request, user)
             return redirect(reverse('index'))
+        else:
+            return render(self.request, 'registration/signup.html', {'form' : form})
 
 
 class CourseListView(generic.ListView):

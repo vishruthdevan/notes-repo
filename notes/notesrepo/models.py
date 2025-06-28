@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 # Create your models here.
@@ -19,7 +20,7 @@ class Course(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=50)
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True, primary_key=True)
     exp = models.IntegerField()
 
     def __str__(self):
