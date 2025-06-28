@@ -31,12 +31,17 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
+                </ul>
+                </li>
+                <li>
                 {% if user.is_authenticated %}
-                    <form action="{% url 'comment_create' %}" method="post">
-                        {{ course_form | crispy}}
+                    <form action="{% url 'comment_create' view.kwargs.code note.id%}" method="post">
+                        {% csrf_token %}
+                        {% load crispy_forms_tags %}
+                        {{ comment_form | crispy}}
+                        <input type="submit" value="Submit">
                     </form>
                 {% endif %}
-                </ul>
                 </li>
             {% endfor %}
         </ul>
