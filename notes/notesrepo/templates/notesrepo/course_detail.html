@@ -11,5 +11,6 @@
             <p>{{note.topic}}</p>    
         {% endfor %}    
     {% endif %}
+    <p><a href="{% url 'note_create' course.code %}">Upload a note file</a></p>
 </div>
 {% endblock content %}
