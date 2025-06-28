@@ -46,32 +46,18 @@ class CourseCreate(View):
         context = {'form':form}
         return render(request, self.template_name, context)
 
-# class NoteCreate(View):
-#     template_name = 'notesrepo/note_create.html'
-#     success_url = reverse_lazy('course_list')
-
-#     def get(self, request, *args, **kwargs):
-#         form = forms.NoteForm()
-#         ctx = {'form': form}
-#         return render(request, self.template_name, ctx)
-
-#     def post(self, request, *args, **kwargs):
-#         form = forms.NoteForm(request.POST, request.FILES or None)
-
-#         if not form.is_valid():
-#             ctx = {'form': form}
-#             return render(request, self.template_name, ctx)
-
-#         # Add owner to the model before saving
-#         form.save(commit=True)
-#         return redirect(self.success_url)
-
 
 class NoteCreate(generic.CreateView):
     model = Note
-    fields = '__all__'
+    fields = ['topic','note_file','author']
     template_name = 'notesrepo/note_create.html'
 
     def get_success_url(self) -> str:
         success_url = reverse_lazy('course_detail', kwargs = self.kwargs)
         return success_url
+    
+    def form_valid(self, form):
+        data = form.save(commit=False)
+        data.course = Course.objects.get(code = self.kwargs['code'])
+        data.save()
+        return super().form_valid(form)
