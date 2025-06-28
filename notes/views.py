@@ -37,10 +37,10 @@ class Signup(View):
             return render(self.request, 'registration/signup.html', {'form' : form})
 
 
-class CourseListView(generic.ListView):
+class CourseListView(LoginRequiredMixin, generic.ListView):
     model = Course
 
-class CourseDetailView(generic.DetailView):
+class CourseDetailView(LoginRequiredMixin, generic.DetailView):
     model = Course
     slug_url_kwarg = 'code'
     slug_field = 'code'
@@ -142,7 +142,7 @@ class CommentCreate(LoginRequiredMixin, View):
 
 class CommentDelete(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        c = get_object_or_404(Comment, id=kwargs['pk'])
+        c = get_object_or_404(Comment, id=kwargs['cid'])
         c.delete()
         return redirect(reverse('course_detail', kwargs = {"code"  : self.kwargs['code']}))
 
