@@ -45,10 +45,18 @@ class CourseDetailView(LoginRequiredMixin, generic.DetailView):
     slug_field = 'code'
     query_pk_and_slug = True
     code = ''
-    
+
     def get_context_data(self, **kwargs):
+        search = self.request.GET.get("search", False)
         context = super().get_context_data(**kwargs)
-        context["notes"] = Note.objects.filter(course__code = context['course'].code)
+
+        if search:
+            q = Note.objects.filter(course__code = context['course'].code)
+            q = q.filter(topic__contains=search)
+            context["notes"] = q
+        else:
+            context["notes"] = Note.objects.filter(course__code = context['course'].code)
+        
         context["comments"] = Comment.objects.all()
         comment_form = forms.CommentForm()
         context["comment_form"] = comment_form
@@ -82,6 +90,7 @@ class NoteCreate(LoginRequiredMixin, generic.CreateView):
     template_name = 'notes/note_create.html'
 
     def get_success_url(self):
+        print("this")
         success_url = reverse_lazy('course_detail', kwargs = self.kwargs)
         return success_url
     
@@ -94,6 +103,11 @@ class NoteCreate(LoginRequiredMixin, generic.CreateView):
         data.author = author
         data.save()
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
+
 
 class NoteDelete(LoginRequiredMixin, generic.DeleteView):
     model = Note

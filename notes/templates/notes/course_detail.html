@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 
+<head>
+{% block head %}
+{{ block.super }}
 {% block title %}<title>{{course.code}}</title>{% endblock title %}
+<style>
+.asteriskField {
+    display: none;
+}
+</style>
+{% endblock head %}
+</head>
 
 {% block content %}
 <div class="container m-5">
@@ -8,6 +18,12 @@
     <p>Name : {{course.name}}</p>
     <p>Code : {{course.code}}</p>
     <div class="my-5">
+    <p>
+    <form action="" method="get">
+        <input type="text" name="search" placeholder="Search...">
+        <input type="submit" value="Submit">
+    </form>
+    </p>
     <p>Notes Available:</p>
     {% if notes %}
         <ul>
@@ -46,8 +62,6 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                </ul>
-                </li>
                 <li>
                 {% if user.is_authenticated %}
                     <form action="{% url 'comment_create' view.kwargs.code note.id%}" method="post">
@@ -58,6 +72,8 @@
                     </form>
                 {% endif %}
                 </li>
+                </ul>
+            </li>    
             {% endfor %}
         </ul>
     {% endif %}
