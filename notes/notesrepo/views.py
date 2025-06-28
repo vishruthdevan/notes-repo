@@ -9,6 +9,7 @@ from . import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 
 def index(request):
     return render(request, 'notesrepo/index.html')
@@ -101,6 +102,19 @@ class NoteDelete(LoginRequiredMixin, generic.DeleteView):
         qs = super().get_queryset()
         print(qs)
         return qs.filter(author__user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        author = Author.objects.get(user = self.request.user)
+        author.exp -= 10
+        author.save()
+        return HttpResponseRedirect(success_url)
         
 class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Note

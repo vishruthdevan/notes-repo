@@ -9,8 +9,15 @@
     {% block head %}{% endblock head %}
 </head>
 <body>
+    {% block leaders %}
+    <ol>
+        {% for leader in leaders %} 
+            <li>{{leader.name}} | {{leader.exp}}</li>
+        {% endfor %}
+    </ol>
+    {% endblock leaders %}
     {% if user.is_authenticated and user.is_active %}
-        <p>{{user.username}}</p>
+        <p>Current User: {{user.username}}</p>
     {% endif %}
     {% block content %}{% endblock content %}
 </body>
