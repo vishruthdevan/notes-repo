@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from . import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
-
+from django.contrib.auth.models import User
 
 def index(request):
     return render(request, 'notesrepo/index.html')
@@ -21,18 +21,16 @@ class Signup(View):
     def post(self, request):
         context = request.POST.copy()
         context['exp'] = 0
-        print(request.POST)
         form = forms.RegisterForm(request.POST)
         aform = forms.AuthorForm(context)
-        print(form.is_valid(), aform.is_valid())
         if form.is_valid() and aform.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            author = Author.objects.get_or_create(owner=user)
-            aform = forms.AuthorForm(context, instance = author)
-            aform.is_valid()
-            aform.save()
-            login(request, user)
+            form.save()
+            print(User.objects.get(username = request.POST['username']))
+            user = User.objects.get(username = request.POST['username'])
+            instance = aform.save(commit=False)
+            instance.user = user
+            instance.save()
+            login(self.request, User)
             return redirect(reverse('index'))
         else:
             return render(self.request, 'registration/signup.html', {'form' : form})
@@ -74,7 +72,7 @@ class CourseCreate(LoginRequiredMixin, View):
 
 class NoteCreate(LoginRequiredMixin, generic.CreateView):
     model = Note
-    fields = ['topic','note_file', 'author']
+    fields = ['topic','note_file']
     template_name = 'notesrepo/note_create.html'
 
     def get_success_url(self) -> str:
@@ -85,7 +83,9 @@ class NoteCreate(LoginRequiredMixin, generic.CreateView):
         print(self.request.user)
         data = form.save(commit=False)
         data.course = Course.objects.get(code = self.kwargs['code'])
-        #data.author = Author.objects.get(owner = self.request.user)
+        author = Author.objects.get(user = self.request.user)
+        author.exp += 10
+        author.save()
+        data.author = author
         data.save()
-        
         return super().form_valid(form)
