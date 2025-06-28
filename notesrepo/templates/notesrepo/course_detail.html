@@ -34,7 +34,7 @@
                 {% if comments%}
                     {% for comment in comments %}
                         {% if comment.note == note %}
-                            <li>{{comment.text}}</li>
+                            <li>{{comment.text}} ---- {{comment.updated_at | date:"r" }}</li>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
