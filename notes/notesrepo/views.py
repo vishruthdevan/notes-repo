@@ -140,6 +140,17 @@ class NoteLike(LoginRequiredMixin, View):
         note = get_object_or_404(Note, id = kwargs['pk'])
         author = get_object_or_404(Author, user = request.user)
         note.like.add(author)
-        print('HAPPENED \n\n\n\n\nHAPPENED')
+        print('LIKE\n\n\n\n\nLIKE')
+        note.save()
+        return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class NoteDislike(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        note = get_object_or_404(Note, id = kwargs['pk'])
+        author = get_object_or_404(Author, user = request.user)
+        note.like.remove(author)
+        print('DISLIKE\n\n\n\n\nDISLIKE')
         note.save()
         return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
