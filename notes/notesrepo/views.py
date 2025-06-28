@@ -130,6 +130,10 @@ class NoteUpdate(LoginRequiredMixin, generic.UpdateView):
         qs = super().get_queryset()
         return qs.filter(author__user = self.request.user)
 
+class CreateComment(LoginRequiredMixin, View):
+    def post(*args, **kwargs):
+        
+
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.db.utils import IntegrityError

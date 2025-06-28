@@ -10,7 +10,6 @@ class CourseForm(forms.ModelForm):
         model = Course
         fields = '__all__'
 
-
 class RegisterForm(UserCreationForm):
     name = forms.CharField(max_length=50)
     class Meta(UserCreationForm.Meta):
@@ -21,3 +20,8 @@ class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
         fields = ['name', 'exp']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
