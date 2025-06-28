@@ -19,10 +19,17 @@
                     <a href="{% url 'note_update' view.kwargs.code note.id %}">Update</a>
                     </p>
                 {% endif %}
-                <p>
-                <a href="#" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;">Like</a>
-                <a href="#" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;">Dislike</a>
-                </p>
+                {% if note in liked %}
+                    <p>
+                        <a href="#" style="display: none;" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="like_{{ note.id }}">Like</a>
+                        <a href="#" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="dislike_{{ note.id }}">Dislike</a>
+                    </p>
+                {% else %}
+                    <p>
+                        <a href="#" onclick="like(`{% url 'note_like' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="like_{{ note.id }}">Like</a>
+                        <a href="#" style="display: none;" onclick="like(`{% url 'note_dislike' view.kwargs.code note.id %}`, {{note.id}}); return false;" id="dislike_{{ note.id }}">Dislike</a>
+                    </p>
+                {% endif %}
                 <ul>
                 {% if comments%}
                     {% for comment in comments %}
@@ -56,6 +63,8 @@ function like(url, id) {
     }).fail(function(xhr) {
         alert('Url failed with '+xhr.status+' '+url);
     });
+    $(`#like_${id}`).toggle();
+    $(`#dislike_${id}`).toggle();
 }
 </script>
 {% endblock content %}
