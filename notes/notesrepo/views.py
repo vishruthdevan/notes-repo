@@ -150,7 +150,7 @@ class NoteLike(LoginRequiredMixin, View):
         note = get_object_or_404(Note, id = kwargs['pk'])
         author = get_object_or_404(Author, user = request.user)
         note.like.add(author)
-        print('LIKE\n\n\n\n\nLIKE')
+        print('LIKED\n\n\n\n\nLIKED')
         note.save()
         return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
 
@@ -161,6 +161,6 @@ class NoteDislike(LoginRequiredMixin, View):
         note = get_object_or_404(Note, id = kwargs['pk'])
         author = get_object_or_404(Author, user = request.user)
         note.like.remove(author)
-        print('DISLIKE\n\n\n\n\nDISLIKE')
+        print('DISLIKED\n\n\n\n\nDISLIKED')
         note.save()
         return redirect(reverse('course_detail', kwargs={'code' : kwargs['code']}))
