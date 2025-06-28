@@ -9,6 +9,7 @@ urlpatterns = [
     path('courses/', views.CourseListView.as_view(), name = 'course_list'),
     path('courses/create/', views.CourseCreate.as_view(), name = 'course_create'),
     path('courses/<slug:code>/', views.CourseDetailView.as_view(), name = 'course_detail'),
+    path('courses/<slug:code>/upload-note/', views.NoteCreate.as_view(), name = 'note_create'),
     # path('courses/<slug:code>',),
     # path('courses/<slug:code>/notes',),
 ]
